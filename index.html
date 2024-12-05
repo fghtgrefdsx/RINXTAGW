@@ -28,54 +28,74 @@
         canvas.height = window.innerHeight;
 
         // Game variables
-        let car = {
-            x: canvas.width / 2,
-            y: canvas.height - 100,
+        const car = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 150,
             width: 50,
             height: 100,
+            color: "red",
             speed: 5,
-            direction: 0
+            direction: 0, // -1 for left, 1 for right
         };
 
-        let road = {
-            width: 300,
+        const road = {
             x: canvas.width / 2 - 150,
+            width: 300,
+            color: "#444",
+            laneColor: "#fff",
+            laneWidth: 5,
+            laneHeight: 20,
+            laneGap: 20,
         };
 
-        // Game loop
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Update game logic
-        function update() {
-            car.x += car.speed * car.direction;
-
-            // Keep car within the road bounds
-            if (car.x < road.x) {
-                car.x = road.x;
-            }
-            if (car.x + car.width > road.x + road.width) {
-                car.x = road.x + road.width - car.width;
-            }
-        }
-
-        // Draw game elements
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw road
-            ctx.fillStyle = "#808080";
+        // Draw the road
+        function drawRoad() {
+            ctx.fillStyle = road.color;
             ctx.fillRect(road.x, 0, road.width, canvas.height);
 
-            // Draw car
-            ctx.fillStyle = "#FF0000";
+            // Draw lane markers
+            ctx.fillStyle = road.laneColor;
+            for (let y = 0; y < canvas.height; y += road.laneHeight + road.laneGap) {
+                ctx.fillRect(
+                    canvas.width / 2 - road.laneWidth / 2,
+                    y,
+                    road.laneWidth,
+                    road.laneHeight
+                );
+            }
+        }
+
+        // Draw the car
+        function drawCar() {
+            ctx.fillStyle = car.color;
             ctx.fillRect(car.x, car.y, car.width, car.height);
         }
 
-        // Listen for input
+        // Update car position
+        function update() {
+            car.x += car.speed * car.direction;
+
+            // Keep car within road boundaries
+            const leftBoundary = road.x;
+            const rightBoundary = road.x + road.width - car.width;
+
+            if (car.x < leftBoundary) {
+                car.x = leftBoundary;
+            } else if (car.x > rightBoundary) {
+                car.x = rightBoundary;
+            }
+        }
+
+        // Main game loop
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawRoad();
+            drawCar();
+            update();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Event listeners for input
         window.addEventListener("keydown", (e) => {
             if (e.key === "ArrowLeft") {
                 car.direction = -1;
