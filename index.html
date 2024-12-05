@@ -1,10 +1,4 @@
 <!DOCTYPE html>
-<title> 
-
-this is a cool websits
-
-</title>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,21 +14,21 @@ this is a cool websits
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
         }
 
-        #login-container, #games-container {
+        #login-container {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 600px;
             text-align: center;
+            display: block;
         }
 
-        #games-container {
+        #game-container {
             display: none;
+            width: 100%;
+            height: 100%;
         }
 
         input[type="text"], input[type="password"] {
@@ -58,24 +52,32 @@ this is a cool websits
             background-color: #0056b3;
         }
 
-        .game {
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .game-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
         iframe {
             width: 100%;
-            height: 400px;
+            height: 100vh;
             border: none;
+        }
+
+        .nav-bar {
+            background: #007BFF;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .nav-bar button {
+            margin: 0 5px;
+            background: white;
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        .nav-bar button:hover {
+            background: #0056b3;
+            color: white;
         }
     </style>
 </head>
@@ -88,21 +90,14 @@ this is a cool websits
         <p id="error-message" style="color: red; display: none;">Incorrect username or password!</p>
     </div>
 
-    <div id="games-container">
-        <h2>Unblocked Games</h2>
-        <div class="game">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Flappy_Bird_logo.png/800px-Flappy_Bird_logo.png" alt="Flappy Bird Logo" class="game-logo">
-            <iframe src="https://flappybird.io/"></iframe>
+    <div id="game-container">
+        <div class="nav-bar">
+            <button onclick="loadGame('https://flappybird.io/')">Flappy Bird</button>
+            <button onclick="loadGame('https://playsnake.org/')">Snake</button>
+            <button onclick="loadGame('https://tetris.com/play-tetris')">Tetris</button>
+            <button onclick="logout()">Logout</button>
         </div>
-        <div class="game">
-            <img src="https://www.snakegameonline.net/img/logo.png" alt="Snake Game Logo" class="game-logo">
-            <iframe src="https://playsnake.org/"></iframe>
-        </div>
-        <div class="game">
-            <img src="https://upload.wikimedia.org/wikipedia/en/8/85/Tetris_Logotype.png" alt="Tetris Logo" class="game-logo">
-            <iframe src="https://tetris.com/play-tetris"></iframe>
-        </div>
-        <button onclick="logout()">Logout</button>
+        <iframe id="game-frame" src="https://flappybird.io/"></iframe>
     </div>
 
     <script>
@@ -112,7 +107,7 @@ this is a cool websits
 
             if (username === 'ryal' && password === 'ryal') {
                 document.getElementById('login-container').style.display = 'none';
-                document.getElementById('games-container').style.display = 'block';
+                document.getElementById('game-container').style.display = 'block';
             } else {
                 const errorMessage = document.getElementById('error-message');
                 errorMessage.style.display = 'block';
@@ -122,9 +117,13 @@ this is a cool websits
             }
         }
 
+        function loadGame(url) {
+            document.getElementById('game-frame').src = url;
+        }
+
         function logout() {
             document.getElementById('login-container').style.display = 'block';
-            document.getElementById('games-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'none';
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
         }
