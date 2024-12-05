@@ -1,117 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drift Game</title>
-    <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-            background-color: #202020;
-        }
+const express = require('express');
+const app = express();
+const port = 3000;
 
-        canvas {
-            display: block;
-        }
-    </style>
-</head>
-<body>
-    <canvas id="gameCanvas"></canvas>
+// Array to store timestamps of visits
+let visitTimestamps = [];
 
-    <script>
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+// Serve the HTML directly
+app.get('/', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Visitor Counter</title>
+            <script>
+                async function fetchVisitorCount() {
+                    try {
+                        const response = await fetch('/visitor-count');
+                        const data = await response.json();
+                        document.getElementById('visitorCount').textContent = data.count;
+                    } catch (error) {
+                        console.error("Error fetching visitor count:", error);
+                    }
+                }
 
-        // Set canvas dimensions
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+                setInterval(fetchVisitorCount, 5000); // Refresh count every 5 seconds
+                window.onload = fetchVisitorCount;
+            </script>
+        </head>
+        <body>
+            <h1>Welcome to the Website</h1>
+            <p>Visitors in the last hour: <span id="visitorCount">Loading...</span></p>
+        </body>
+        </html>
+    `);
+});
 
-        // Game variables
-        const car = {
-            x: canvas.width / 2 - 25,
-            y: canvas.height - 150,
-            width: 50,
-            height: 100,
-            color: "red",
-            speed: 5,
-            direction: 0, // -1 for left, 1 for right
-        };
+// API endpoint to return visitor count
+app.get('/visitor-count', (req, res) => {
+    const oneHourAgo = Date.now() - 60 * 60 * 1000;
 
-        const road = {
-            x: canvas.width / 2 - 150,
-            width: 300,
-            color: "#444",
-            laneColor: "#fff",
-            laneWidth: 5,
-            laneHeight: 20,
-            laneGap: 20,
-        };
+    // Remove visits older than one hour
+    visitTimestamps = visitTimestamps.filter(timestamp => timestamp >= oneHourAgo);
 
-        // Draw the road
-        function drawRoad() {
-            ctx.fillStyle = road.color;
-            ctx.fillRect(road.x, 0, road.width, canvas.height);
+    // Add the current visit timestamp
+    visitTimestamps.push(Date.now());
 
-            // Draw lane markers
-            ctx.fillStyle = road.laneColor;
-            for (let y = 0; y < canvas.height; y += road.laneHeight + road.laneGap) {
-                ctx.fillRect(
-                    canvas.width / 2 - road.laneWidth / 2,
-                    y,
-                    road.laneWidth,
-                    road.laneHeight
-                );
-            }
-        }
+    // Respond with the count of visits in the last hour
+    res.json({ count: visitTimestamps.length });
+});
 
-        // Draw the car
-        function drawCar() {
-            ctx.fillStyle = car.color;
-            ctx.fillRect(car.x, car.y, car.width, car.height);
-        }
-
-        // Update car position
-        function update() {
-            car.x += car.speed * car.direction;
-
-            // Keep car within road boundaries
-            const leftBoundary = road.x;
-            const rightBoundary = road.x + road.width - car.width;
-
-            if (car.x < leftBoundary) {
-                car.x = leftBoundary;
-            } else if (car.x > rightBoundary) {
-                car.x = rightBoundary;
-            }
-        }
-
-        // Main game loop
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawRoad();
-            drawCar();
-            update();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // Event listeners for input
-        window.addEventListener("keydown", (e) => {
-            if (e.key === "ArrowLeft") {
-                car.direction = -1;
-            } else if (e.key === "ArrowRight") {
-                car.direction = 1;
-            }
-        });
-
-        window.addEventListener("keyup", (e) => {
-            if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-                car.direction = 0;
-            }
-        });
-
-        // Start the game
-        gameLoop();
-    </script>
-</body>
-</html>
+// Start the server
+app.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}`);
+});
