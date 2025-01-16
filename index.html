@@ -1,57 +1,90 @@
-const express = require('express');
-const app = express();
-const port = 3000;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glowing Names</title>
+    <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://www.fontsquirrel.com/fonts/download/minecraft') format('truetype');
+        }
 
-// Array to store timestamps of visits
-let visitTimestamps = [];
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: 'Minecraft', Arial, sans-serif;
+        }
 
-// Serve the HTML directly
-app.get('/', (req, res) => {
-    res.send(`
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Visitor Counter</title>
-            <script>
-                async function fetchVisitorCount() {
-                    try {
-                        const response = await fetch('/visitor-count');
-                        const data = await response.json();
-                        document.getElementById('visitorCount').textContent = data.count;
-                    } catch (error) {
-                        console.error("Error fetching visitor count:", error);
-                    }
-                }
+        .container {
+            text-align: center;
+        }
 
-                setInterval(fetchVisitorCount, 5000); // Refresh count every 5 seconds
-                window.onload = fetchVisitorCount;
-            </script>
-        </head>
-        <body>
-            <h1>Welcome to the Website</h1>
-            <p>Visitors in the last hour: <span id="visitorCount">Loading...</span></p>
-        </body>
-        </html>
-    `);
-});
+        .image {
+            margin-bottom: 20px;
+        }
 
-// API endpoint to return visitor count
-app.get('/visitor-count', (req, res) => {
-    const oneHourAgo = Date.now() - 60 * 60 * 1000;
+        .intro {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+            margin-bottom: 20px;
+        }
 
-    // Remove visits older than one hour
-    visitTimestamps = visitTimestamps.filter(timestamp => timestamp >= oneHourAgo);
+        .names {
+            list-style: none;
+            padding: 0;
+            display: none;
+        }
 
-    // Add the current visit timestamp
-    visitTimestamps.push(Date.now());
+        .names li {
+            font-size: 24px;
+            margin: 10px 0;
+            text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+            transition: text-shadow 0.3s ease-in-out;
+        }
 
-    // Respond with the count of visits in the last hour
-    res.json({ count: visitTimestamps.length });
-});
+        .names li:hover {
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+        }
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+        .continue {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .continue:hover {
+            color: white;
+        }
+    </style>
+    <script>
+        function showNames() {
+            document.querySelector('.intro').style.display = 'none';
+            document.querySelector('.names').style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="image">
+            <img src="https://via.placeholder.com/150" alt="Placeholder Character Image">
+        </div>
+        <div class="intro" onclick="showNames()">Click to enter</div>
+        <ul class="names">
+            <li>Ryal</li>
+            <li>Deceive</li>
+            <li>Juvinal</li>
+            <li>Zenh</li>
+            <li>Fragzz</li>
+        </ul>
+    </div>
+</body>
+</html>
