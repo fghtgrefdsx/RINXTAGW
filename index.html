@@ -13,89 +13,99 @@
         body {
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background-color: black;
             color: white;
             font-family: 'Minecraft', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
 
         .container {
             text-align: center;
-        }
-
-        .image {
-            margin-bottom: 20px;
             display: none;
         }
 
-        .image img {
-            width: 300px; /* Set the desired width */
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 10px; /* Optional: add rounded corners */
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
+            margin-bottom: 20px;
+        }
+
+        .names-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .profile {
+            text-align: center;
+        }
+
+        .profile img {
+            width: 100px;
+            height: 100px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            background: white; /* Placeholder for image padding */
+        }
+
+        .profile span {
+            display: block;
+            font-size: 18px;
+            text-shadow: 0 0 5px white, 0 0 10px white;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: gray;
         }
 
         .intro {
             font-size: 24px;
             font-weight: bold;
-            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
-            margin-bottom: 20px;
+            text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
             cursor: pointer;
-        }
-
-        .names {
-            list-style: none;
-            padding: 0;
-            display: none;
-        }
-
-        .names li {
-            font-size: 24px;
-            font-weight: 900; /* Extra bold */
-            color: white;
-            margin: 10px 0;
-            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
-            transition: text-shadow 0.3s ease-in-out;
-        }
-
-        .names li:hover {
-            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
-        }
-
-        .continue {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #888;
-            cursor: pointer;
-        }
-
-        .continue:hover {
-            color: white;
         }
     </style>
     <script>
         function showContent() {
             document.querySelector('.intro').style.display = 'none';
-            document.querySelector('.image').style.display = 'block';
-            document.querySelector('.names').style.display = 'block';
+            document.querySelector('.container').style.display = 'block';
         }
     </script>
 </head>
 <body>
+    <div class="intro" onclick="showContent()">Click to enter</div>
     <div class="container">
-        <div class="intro" onclick="showContent()">Click to enter</div>
-        <div class="image">
-            <img src="https://64.media.tumblr.com/8f13db1b467c5d1aaa428f7d36b48342/tumblr_nm8h4vJFks1uqqex2o1_640.jpg">
+        <div class="title">Skidlol</div>
+        <div class="names-container">
+            <div class="profile">
+                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <span>ryal</span>
+            </div>
+            <div class="profile">
+                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <span>decieve</span>
+            </div>
+            <div class="profile">
+                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <span>juvinal</span>
+            </div>
+            <div class="profile">
+                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <span>zenh</span>
+            </div>
+            <div class="profile">
+                <img src="https://via.placeholder.com/100" alt="Profile Picture">
+                <span>fragzz</span>
+            </div>
         </div>
-        <ul class="names">
-            <li>ryal</li>
-            <li>decieve</li>
-            <li>juvinal</li>
-            <li>zenh</li>
-            <li>fragzz</li>
-        </ul>
+        <div class="footer">© skidlol | 2025</div>
     </div>
 </body>
 </html>
