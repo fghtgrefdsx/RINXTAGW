@@ -3,203 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Carousel with Live Chat</title>
+    <title>skidlol</title>
     <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://www.fontsquirrel.com/fonts/download/minecraft') format('truetype');
+        }
+
         body {
-            font-family: monospace, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1e1e1e;
-            color: #d4d4d4;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: 'Minecraft', Arial, sans-serif;
         }
-        .carousel {
-            position: relative;
-            width: 80%;
-            max-width: 800px;
-            overflow: hidden;
-            border: 1px solid #333;
-            background: #1e1e1e;
-            border-radius: 5px;
-        }
-        .carousel-images {
-            display: flex;
-            transition: transform 0.5s ease;
-            width: 300%;
-        }
-        .carousel-images img {
-            width: 100%;
-            display: block;
-            cursor: pointer;
-        }
-        .arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #333;
-            color: #d4d4d4;
-            border: none;
-            border-radius: 5px;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        .arrow.left {
-            left: 10px;
-        }
-        .arrow.right {
-            right: 10px;
-        }
-        .chat-box {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            max-width: 90%;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 10px;
-        }
-        .chat-box header {
-            background: #333;
-            color: #d4d4d4;
-            padding: 10px;
-            border-radius: 3px 3px 0 0;
-            font-weight: bold;
+
+        .container {
             text-align: center;
         }
-        .chat-box .messages {
-            height: 200px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #252526;
-            border-bottom: 1px solid #333;
-            color: #9cdcfe;
-            font-size: 0.9rem;
+
+        .image {
+            margin-bottom: 20px;
+            display: none;
         }
-        .chat-box .input-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
+
+        .image img {
+            width: 300px; /* Set the desired width */
+            height: auto; /* Maintain aspect ratio */
+            border-radius: 10px; /* Optional: add rounded corners */
         }
-        .chat-box .input-box input {
-            flex: 1;
-            padding: 10px;
-            background: #333;
-            border: 1px solid #444;
-            color: #d4d4d4;
-            border-radius: 5px;
-        }
-        .chat-box .input-box button {
-            padding: 10px;
-            background: #007acc;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
+
+        .intro {
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+            margin-bottom: 20px;
             cursor: pointer;
         }
-    </style>
-    <!-- Firebase Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
-</head>
-<body>
-    <div class="carousel">
-        <button class="arrow left">&#9664;</button>
-        <div class="carousel-images">
-            <img src="https://via.placeholder.com/800x400?text=Image+1" alt="Image 1">
-            <img src="https://via.placeholder.com/800x400?text=Image+2" alt="Image 2">
-            <img src="https://via.placeholder.com/800x400?text=Image+3" alt="Image 3">
-        </div>
-        <button class="arrow right">&#9654;</button>
-    </div>
 
-    <div class="chat-box">
-        <header>Live Chat</header>
-        <div class="messages"></div>
-        <div class="input-box">
-            <input type="text" placeholder="Type a message...">
-            <button>Send</button>
-        </div>
-    </div>
-
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        const carouselImages = document.querySelector('.carousel-images');
-        const images = document.querySelectorAll('.carousel-images img');
-        const leftArrow = document.querySelector('.arrow.left');
-        const rightArrow = document.querySelector('.arrow.right');
-        const chatBox = document.querySelector('.chat-box');
-        const messages = document.querySelector('.messages');
-        const input = document.querySelector('.input-box input');
-        const sendButton = document.querySelector('.input-box button');
-
-        let currentIndex = 0;
-
-        // Carousel navigation
-        function updateCarousel() {
-            carouselImages.style.transform = `translateX(-${currentIndex * 100}%)`;
+        .names {
+            list-style: none;
+            padding: 0;
+            display: none;
         }
 
-        leftArrow.addEventListener('click', () => {
-            currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
-            updateCarousel();
-        });
+        .names li {
+            font-size: 24px;
+            font-weight: 900; /* Extra bold */
+            color: white;
+            margin: 10px 0;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+            transition: text-shadow 0.3s ease-in-out;
+        }
 
-        rightArrow.addEventListener('click', () => {
-            currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
-            updateCarousel();
-        });
+        .names li:hover {
+            text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+        }
 
-        // Open chat box when an image is clicked
-        images.forEach(image => {
-            image.addEventListener('click', () => {
-                chatBox.style.display = 'block';
-            });
-        });
+        .continue {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #888;
+            cursor: pointer;
+        }
 
-        // Real-time chat functionality
-        const chatRef = db.ref('chat');
-
-        // Load existing messages
-        chatRef.on('child_added', snapshot => {
-            const messageData = snapshot.val();
-            const messageElement = document.createElement('div');
-            messageElement.textContent = messageData;
-            messages.appendChild(messageElement);
-            messages.scrollTop = messages.scrollHeight;
-        });
-
-        // Send a new message
-        sendButton.addEventListener('click', () => {
-            const message = input.value.trim();
-            if (message) {
-                chatRef.push(message);
-                input.value = '';
-            }
-        });
+        .continue:hover {
+            color: white;
+        }
+    </style>
+    <script>
+        function showContent() {
+            document.querySelector('.intro').style.display = 'none';
+            document.querySelector('.image').style.display = 'block';
+            document.querySelector('.names').style.display = 'block';
+        }
     </script>
+</head>
+<body>
+    <div class="container">
+        <div class="intro" onclick="showContent()">Click to enter</div>
+        <div class="image">
+            <img src="https://64.media.tumblr.com/8f13db1b467c5d1aaa428f7d36b48342/tumblr_nm8h4vJFks1uqqex2o1_640.jpg">
+        </div>
+        <ul class="names">
+            <li>ryal</li>
+            <li>decieve</li>
+            <li>juvinal</li>
+            <li>zenh</li>
+            <li>fragzz</li>
+        </ul>
+    </div>
 </body>
 </html>
