@@ -45,7 +45,7 @@
         .title {
             font-size: 48px;
             font-weight: bold;
-            text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
+            text-shadow: 0 0 5px white, 0 0 10px white, 0 0 15px white;
             margin-bottom: 20px;
         }
 
@@ -84,41 +84,8 @@
             font-weight: bold;
             text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
             cursor: pointer;
-        }
-
-        /* Snow animation */
-        .snow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .snowflake {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-100px) translateX(0);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) translateX(calc(-50px + 100px * random));
-                opacity: 0;
-            }
+            position: relative;
+            z-index: 2;
         }
     </style>
     <script>
@@ -128,22 +95,6 @@
             const container = document.querySelector('.container');
             container.classList.add('visible');
         }
-
-        // Generate snowflakes
-        document.addEventListener('DOMContentLoaded', () => {
-            const snowContainer = document.createElement('div');
-            snowContainer.classList.add('snow');
-            document.body.appendChild(snowContainer);
-
-            for (let i = 0; i < 100; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.classList.add('snowflake');
-                snowflake.style.left = Math.random() * 100 + 'vw';
-                snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
-                snowContainer.appendChild(snowflake);
-            }
-        });
     </script>
 </head>
 <body>
