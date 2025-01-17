@@ -22,11 +22,24 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            position: relative;
+        }
+
+        body.vignette {
+            background: radial-gradient(circle, rgba(255,0,0,0.5) 10%, rgba(0,0,0,1) 90%);
+            transition: background 1s ease;
         }
 
         .container {
             text-align: center;
             display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .container.visible {
+            display: block;
+            opacity: 1;
         }
 
         .title {
@@ -50,13 +63,14 @@
             height: 100px;
             border-radius: 15px;
             margin-bottom: 10px;
-            background: white; /* Placeholder for image padding */
+            background: white;
         }
 
         .profile span {
             display: block;
             font-size: 18px;
-            text-shadow: 0 0 5px white, 0 0 10px white;
+            color: red;
+            text-shadow: 0 0 5px red, 0 0 10px red;
         }
 
         .footer {
@@ -71,12 +85,65 @@
             text-shadow: 0 0 10px white, 0 0 20px white, 0 0 30px white;
             cursor: pointer;
         }
+
+        /* Snow animation */
+        .snow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .snowflake {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) translateX(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) translateX(calc(-50px + 100px * random));
+                opacity: 0;
+            }
+        }
     </style>
     <script>
         function showContent() {
+            document.body.classList.add('vignette');
             document.querySelector('.intro').style.display = 'none';
-            document.querySelector('.container').style.display = 'block';
+            const container = document.querySelector('.container');
+            container.classList.add('visible');
         }
+
+        // Generate snowflakes
+        document.addEventListener('DOMContentLoaded', () => {
+            const snowContainer = document.createElement('div');
+            snowContainer.classList.add('snow');
+            document.body.appendChild(snowContainer);
+
+            for (let i = 0; i < 100; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowContainer.appendChild(snowflake);
+            }
+        });
     </script>
 </head>
 <body>
@@ -85,33 +152,29 @@
         <div class="title">skidlol</div>
         <div class="names-container">
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/VWpQ56f/IMG-5083.jpg" alt="IMG-5083" border="0"></a>
+                <a href=""><img src="https://i.ibb.co/VWpQ56f/IMG-5083.jpg" alt="IMG-5083"></a>
                 <span>𝖗𝖞𝖆𝖑</span>
             </div>
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/QHHvfx7/IMG-5078.jpg" alt="IMG-5078" border="0"></a>
+                <a href=""><img src="https://i.ibb.co/QHHvfx7/IMG-5078.jpg" alt="IMG-5078"></a>
                 <span>𝖉𝖊𝖈𝖊𝖎𝖛𝖊</span>
             </div>
-            
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/Cb53T8v/IMG-5085.jpg" alt="IMG-5085" border="0"></a>
+                <a href=""><img src="https://i.ibb.co/Cb53T8v/IMG-5085.jpg" alt="IMG-5085"></a>
                 <span>𝖟𝖊𝖓𝖍</span>
             </div>
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/yXgTY3J/IMG-5084.jpg" alt="IMG-5084" border="0"></a>
+                <a href=""><img src="https://i.ibb.co/yXgTY3J/IMG-5084.jpg" alt="IMG-5084"></a>
                 <span>𝖋𝖗𝖆𝖌𝖟𝖟</span>
             </div>
-       <div class="profile">
-                <a href=""><img src="https://i.ibb.co/4dfMW4X/IMG-5081.jpg" alt="IMG-5081" border="0"></a>
+            <div class="profile">
+                <a href=""><img src="https://i.ibb.co/4dfMW4X/IMG-5081.jpg" alt="IMG-5081"></a>
                 <span>𝕬2𝕶</span>
             </div>
         </div>
-       
-        
-    
-            
-            
-    © skidlol | 2025</div>
-
+        <div class="footer">
+            © skidlol | 2025
+        </div>
+    </div>
 </body>
 </html>
