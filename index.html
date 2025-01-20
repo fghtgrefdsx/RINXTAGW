@@ -13,7 +13,6 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: rgba(0, 0, 0, 0.9);
             color: white;
             font-family: 'PressStart2P', Arial, sans-serif;
             display: flex;
@@ -22,12 +21,19 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            position: relative;
+            transition: background 1s ease;
         }
 
-        body.vignette {
-            background: radial-gradient(circle, rgba(255,0,0,0.5) 10%, rgba(0,0,0,0.9) 90%);
-            transition: background 1s ease;
+        body.theme-blue {
+            background: radial-gradient(circle, rgba(0, 0, 255, 0.5) 10%, rgba(0, 0, 50, 0.9) 90%);
+        }
+
+        body.theme-red {
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.5) 10%, rgba(50, 0, 0, 0.9) 90%);
+        }
+
+        body.theme-purple {
+            background: radial-gradient(circle, rgba(128, 0, 128, 0.5) 10%, rgba(50, 0, 50, 0.9) 90%);
         }
 
         .container {
@@ -43,14 +49,14 @@
         }
 
         .title {
-            font-size: 48px;
-            font-weight: bold;
-            text-shadow: 0 0 3px white, 0 0 6px white;
+            font-size: 36px;
             margin-bottom: 20px;
+            text-shadow: 0 0 10px white;
         }
 
-        .names-container {
+        .profiles {
             display: flex;
+            justify-content: center;
             gap: 20px;
             margin-bottom: 20px;
         }
@@ -62,137 +68,144 @@
         .profile img {
             width: 100px;
             height: 100px;
-            border-radius: 15px;
+            border-radius: 10px;
             margin-bottom: 10px;
-            background: white;
         }
 
         .profile span {
             display: block;
-            font-size: 18px;
-            color: red;
-            text-shadow: 0 0 3px red, 0 0 6px red;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: gray;
+            font-size: 16px;
         }
 
         .intro {
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 0 0 3px white, 0 0 6px white;
+            font-size: 20px;
             cursor: pointer;
-            position: relative;
-            z-index: 2;
+            text-shadow: 0 0 5px white;
         }
 
-        .more-info-btn {
-            padding: 10px 20px;
+        .btn {
             margin-top: 20px;
+            padding: 10px 20px;
             background-color: #ff0000;
-            color: white;
             border: none;
+            color: white;
+            cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
-            cursor: pointer;
         }
 
-        .more-info-btn:hover {
+        .btn:hover {
             background-color: #cc0000;
         }
 
         #output {
             margin-top: 20px;
             font-size: 14px;
-            color: lightgray;
             white-space: pre-wrap;
+            color: lightgray;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: gray;
         }
     </style>
     <script>
+        // Available themes
+        const themes = ['theme-blue', 'theme-red', 'theme-purple'];
+
+        // Assign a random theme on page load
+        function assignRandomTheme() {
+            const theme = themes[Math.floor(Math.random() * themes.length)];
+            document.body.classList.add(theme);
+        }
+
+        // Show the main content
         function showContent() {
-            document.body.classList.add('vignette');
             document.querySelector('.intro').style.display = 'none';
             const container = document.querySelector('.container');
             container.classList.add('visible');
         }
 
+        // Fetch and display location details
         async function fetchInfo() {
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerText = "Fetching detailed information...\n";
+            const output = document.getElementById('output');
+            output.innerText = "Fetching information...";
 
             try {
                 const ip = await getIP();
-                appendOutput(`IP Address: ${ip}`);
+                output.innerText += `\nIP Address: ${ip}`;
 
-                const location = await getLocationInfo(ip);
-                appendOutput(`Country: ${location.country}`);
-                appendOutput(`Timezone: ${location.timezone}`);
-                appendOutput(`Latitude: ${location.latitude}`);
-                appendOutput(`Longitude: ${location.longitude}`);
-                appendOutput(`Address: ${location.address}`);
+                const location = await getLocation(ip);
+                output.innerText += `\nCountry: ${location.country}\nCity: ${location.city}`;
+                output.innerText += `\nRegion: ${location.region}\nTimezone: ${location.timezone}`;
+                output.innerText += `\nLatitude: ${location.latitude}\nLongitude: ${location.longitude}`;
+                output.innerText += `\nFull Address: ${location.address}`;
             } catch (error) {
-                appendOutput(`Error: ${error.message}`);
+                output.innerText += `\nError fetching details: ${error.message}`;
             }
         }
 
-        function appendOutput(text) {
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerText += `\n${text}`;
-        }
-
+        // Get user's public IP address
         async function getIP() {
             const response = await fetch('https://api.ipify.org?format=json');
             const data = await response.json();
             return data.ip;
         }
 
-        async function getLocationInfo(ip) {
+        // Get location details using IP
+        async function getLocation(ip) {
             const response = await fetch(`https://ipapi.co/${ip}/json/`);
             const data = await response.json();
             return {
                 country: data.country_name || 'Unknown',
+                city: data.city || 'Unknown',
+                region: data.region || 'Unknown',
                 timezone: data.timezone || 'Unknown',
                 latitude: data.latitude || 'Unknown',
                 longitude: data.longitude || 'Unknown',
                 address: `${data.city || 'Unknown'}, ${data.region || 'Unknown'}, ${data.country_name || 'Unknown'}`
             };
         }
+
+        // Run theme assignment on page load
+        window.onload = assignRandomTheme;
     </script>
 </head>
 <body>
-    <div class="intro" onclick="showContent()">Click to enter</div>
+    <div class="intro" onclick="showContent()">Click to Enter</div>
+
     <div class="container">
         <div class="title">skidlol</div>
-        <div class="names-container">
+
+        <div class="profiles">
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/VWpQ56f/IMG-5083.jpg" alt="IMG-5083"></a>
+                <img src="https://i.ibb.co/VWpQ56f/IMG-5083.jpg" alt="ryal">
                 <span>𝖗𝖞𝖆𝖑</span>
             </div>
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/QHHvfx7/IMG-5078.jpg" alt="IMG-5078"></a>
+                <img src="https://i.ibb.co/QHHvfx7/IMG-5078.jpg" alt="deceive">
                 <span>𝖉𝖊𝖈𝖊𝖎𝖛𝖊</span>
             </div>
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/Cb53T8v/IMG-5085.jpg" alt="IMG-5085"></a>
+                <img src="https://i.ibb.co/Cb53T8v/IMG-5085.jpg" alt="zenh">
                 <span>𝖟𝖊𝖓𝖍</span>
             </div>
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/yXgTY3J/IMG-5084.jpg" alt="IMG-5084"></a>
+                <img src="https://i.ibb.co/yXgTY3J/IMG-5084.jpg" alt="fragzz">
                 <span>𝖋𝖗𝖆𝖌𝖟𝖟</span>
             </div>
             <div class="profile">
-                <a href=""><img src="https://i.ibb.co/4dfMW4X/IMG-5081.jpg" alt="IMG-5081"></a>
+                <img src="https://i.ibb.co/4dfMW4X/IMG-5081.jpg" alt="a2k">
                 <span>𝕬2𝕶</span>
             </div>
         </div>
-        <button class="more-info-btn" onclick="fetchInfo()">Click for More Info</button>
+
+        <button class="btn" onclick="fetchInfo()">Get More Info</button>
         <div id="output"></div>
-        <div class="footer">
-            © skidlol | 2025
-        </div>
+
+        <div class="footer">© skidlol | 2025</div>
     </div>
 </body>
 </html>
