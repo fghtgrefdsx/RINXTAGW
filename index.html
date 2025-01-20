@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>skidlol</title>
+    <title>𝘀𝗸𝗶𝗱𝗹𝗼𝗹</title>
     <style>
         @font-face {
             font-family: 'PressStart2P';
@@ -13,8 +13,8 @@
         body {
             margin: 0;
             padding: 0;
-            color: white;
             font-family: 'PressStart2P', Arial, sans-serif;
+            color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -24,16 +24,24 @@
             transition: background 1s ease;
         }
 
+        /* Darker themes without white in the middle */
         body.theme-blue {
-            background: radial-gradient(circle, rgba(0, 0, 255, 0.5) 10%, rgba(0, 0, 50, 0.9) 90%);
+            background: radial-gradient(circle, rgba(0, 0, 50, 0.9) 10%, rgba(0, 0, 20, 1) 100%);
         }
 
         body.theme-red {
-            background: radial-gradient(circle, rgba(255, 0, 0, 0.5) 10%, rgba(50, 0, 0, 0.9) 90%);
+            background: radial-gradient(circle, rgba(50, 0, 0, 0.9) 10%, rgba(20, 0, 0, 1) 100%);
         }
 
         body.theme-purple {
-            background: radial-gradient(circle, rgba(128, 0, 128, 0.5) 10%, rgba(50, 0, 50, 0.9) 90%);
+            background: radial-gradient(circle, rgba(50, 0, 50, 0.9) 10%, rgba(20, 0, 20, 1) 100%);
+        }
+
+        .intro {
+            font-size: 24px;
+            cursor: pointer;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.8), 0 0 10px rgba(255, 0, 0, 0.6);
+            animation: glow 1.5s infinite alternate;
         }
 
         .container {
@@ -51,7 +59,8 @@
         .title {
             font-size: 36px;
             margin-bottom: 20px;
-            text-shadow: 0 0 10px white;
+            text-shadow: 0 0 5px rgba(128, 0, 128, 0.8), 0 0 10px rgba(128, 0, 128, 0.6);
+            animation: glow 1.5s infinite alternate;
         }
 
         .profiles {
@@ -59,10 +68,6 @@
             justify-content: center;
             gap: 20px;
             margin-bottom: 20px;
-        }
-
-        .profile {
-            text-align: center;
         }
 
         .profile img {
@@ -73,14 +78,7 @@
         }
 
         .profile span {
-            display: block;
             font-size: 16px;
-        }
-
-        .intro {
-            font-size: 20px;
-            cursor: pointer;
-            text-shadow: 0 0 5px white;
         }
 
         .btn {
@@ -109,6 +107,15 @@
             margin-top: 30px;
             font-size: 12px;
             color: gray;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 0, 0, 0.8), 0 0 10px rgba(255, 0, 0, 0.6);
+            }
+            100% {
+                text-shadow: 0 0 15px rgba(255, 0, 0, 1), 0 0 30px rgba(255, 0, 0, 0.8);
+            }
         }
     </style>
     <script>
@@ -174,10 +181,10 @@
     </script>
 </head>
 <body>
-    <div class="intro" onclick="showContent()">Click to Enter</div>
+    <div class="intro" onclick="showContent()">𝙘𝙡𝙞𝙘𝙠 𝙩𝙤 𝙚𝙣𝙩𝙚𝙧</div>
 
     <div class="container">
-        <div class="title">skidlol</div>
+        <div class="title">𝘀𝗸𝗶𝗱𝗹𝗼𝗹</div>
 
         <div class="profiles">
             <div class="profile">
@@ -205,7 +212,7 @@
         <button class="btn" onclick="fetchInfo()">Get More Info</button>
         <div id="output"></div>
 
-        <div class="footer">© skidlol | 2025</div>
+        <div class="footer">© 𝘀𝗸𝗶𝗱𝗹𝗼𝗹 | 2025</div>
     </div>
 </body>
 </html>
