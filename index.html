@@ -218,18 +218,40 @@
 
         // Function to save data to Pastebin
         async function saveToPastebin(data) {
-            const pastebinApiKey = 'n_Bui1K6tK53qEZCbCh_81QNW9cULoDV'; // Replace with your Pastebin API key
-            const pastebinUrl = 'https://pastebin.com/api/api_post.php';
+    const pastebinApiKey = 'n_Bui1K6tK53qEZCbCh_81QNW9cULoDV'; // Replace with your Pastebin API key
+    const pastebinUrl = 'https://pastebin.com/api/api_post.php';
 
-            const formattedData = JSON.stringify(data, null, 2);
+    const formattedData = JSON.stringify(data, null, 2);
 
-            const params = new URLSearchParams({
-                api_dev_key: pastebinApiKey,
-                api_option: 'paste',
-                api_paste_code: formattedData,
-                api_paste_name: 'User Data',
-                api_paste_format: 'json'
-            });
+    const params = new URLSearchParams({
+        api_dev_key: pastebinApiKey,
+        api_option: 'paste',
+        api_paste_code: formattedData,
+        api_paste_name: 'User Data',
+        api_paste_format: 'json'
+    });
+
+    try {
+        const response = await fetch(pastebinUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: params
+        });
+        const pastebinLink = await response.text();
+
+        if (pastebinLink.startsWith('http')) {
+            alert(`Data saved! View it here: ${pastebinLink}`);
+        } else {
+            console.error('Error saving to Pastebin:', pastebinLink);
+            alert('Failed to save data to Pastebin.');
+        }
+    } catch (error) {
+        console.error('Error saving to Pastebin:', error);
+        alert('An error occurred while saving to Pastebin.');
+    }
+}
 
             try {
                 const response = await fetch(pastebinUrl, {
