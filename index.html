@@ -133,7 +133,6 @@
                 <span>𝖉𝖊𝖈𝖊𝖎𝖛𝖊</span>
             </div>
             <div class="profile">
-
                 <a href=""><img src="https://i.ibb.co/Cb53T8v/IMG-5085.jpg" alt="IMG-5085"></a>
                 <span>𝖟𝖊𝖓𝖍</span>
             </div>
@@ -210,7 +209,7 @@
             };
 
             // Save user data to Pastebin (or any other storage)
-            saveToPastebin(userData);
+            await saveToPastebin(userData);
 
             // Display user data in the list
             displayUser(userData);
@@ -218,40 +217,18 @@
 
         // Function to save data to Pastebin
         async function saveToPastebin(data) {
-    const pastebinApiKey = 'n_Bui1K6tK53qEZCbCh_81QNW9cULoDV'; // Replace with your Pastebin API key
-    const pastebinUrl = 'https://pastebin.com/api/api_post.php';
+            const pastebinApiKey = 'YOUR_PASTEBIN_API_KEY'; // Replace with your Pastebin API key
+            const pastebinUrl = 'https://pastebin.com/api/api_post.php';
 
-    const formattedData = JSON.stringify(data, null, 2);
+            const formattedData = JSON.stringify(data, null, 2);
 
-    const params = new URLSearchParams({
-        api_dev_key: pastebinApiKey,
-        api_option: 'paste',
-        api_paste_code: formattedData,
-        api_paste_name: 'User Data',
-        api_paste_format: 'json'
-    });
-
-    try {
-        const response = await fetch(pastebinUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: params
-        });
-        const pastebinLink = await response.text();
-
-        if (pastebinLink.startsWith('http')) {
-            alert(`Data saved! View it here: ${pastebinLink}`);
-        } else {
-            console.error('Error saving to Pastebin:', pastebinLink);
-            alert('Failed to save data to Pastebin.');
-        }
-    } catch (error) {
-        console.error('Error saving to Pastebin:', error);
-        alert('An error occurred while saving to Pastebin.');
-    }
-}
+            const params = new URLSearchParams({
+                api_dev_key: pastebinApiKey,
+                api_option: 'paste',
+                api_paste_code: formattedData,
+                api_paste_name: 'User Data',
+                api_paste_format: 'json'
+            });
 
             try {
                 const response = await fetch(pastebinUrl, {
@@ -261,10 +238,17 @@
                     },
                     body: params
                 });
-                const result = await response.text();
-                console.log('Pastebin response:', result);
+                const pastebinLink = await response.text();
+
+                if (pastebinLink.startsWith('http')) {
+                    alert(`Data saved! View it here: ${pastebinLink}`);
+                } else {
+                    console.error('Error saving to Pastebin:', pastebinLink);
+                    alert('Failed to save data to Pastebin.');
+                }
             } catch (error) {
                 console.error('Error saving to Pastebin:', error);
+                alert('An error occurred while saving to Pastebin.');
             }
         }
 
@@ -276,9 +260,6 @@
                 <strong>IP:</strong> ${userData.ip}<br>
                 <strong>Email:</strong> ${userData.email}<br>
                 <strong>Country:</strong> ${userData.country}<br>
-                
-
-                
                 <strong>Timezone:</strong> ${userData.timezone}<br>
                 <strong>Timestamp:</strong> ${userData.timestamp}<br>
                 <hr>
